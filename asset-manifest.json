@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/css/main.cec5cd1d.css",
-    "main.js": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/js/main.c24a4f35.js",
+    "main.js": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/js/main.152f2329.js",
     "static/js/453.419a5d54.chunk.js": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/js/453.419a5d54.chunk.js",
     "index.html": "/Anshulkavi-Voice_Recognition_AI_Assitant/index.html",
     "main.cec5cd1d.css.map": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/css/main.cec5cd1d.css.map",
-    "main.c24a4f35.js.map": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/js/main.c24a4f35.js.map",
+    "main.152f2329.js.map": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/js/main.152f2329.js.map",
     "453.419a5d54.chunk.js.map": "/Anshulkavi-Voice_Recognition_AI_Assitant/static/js/453.419a5d54.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cec5cd1d.css",
-    "static/js/main.c24a4f35.js"
+    "static/js/main.152f2329.js"
   ]
 }
