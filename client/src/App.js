@@ -23,8 +23,17 @@ function App() {
         },
         body: JSON.stringify({ command: message }),
       });
-      const data = await response.json();
-      return response.ok ? data.response : 'Something went wrong.';
+
+      const text = await response.text(); // Get raw response
+      console.log('Response Text:', text); // Log it to check if it's valid JSON
+
+      try {
+        const data = JSON.parse(text); // Attempt to parse manually
+        return response.ok ? data.response : 'Something went wrong.';
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        return 'Something went wrong.';
+      }
     } catch (error) {
       console.error("Error:", error);
       return 'Something went wrong.';
@@ -34,16 +43,24 @@ function App() {
   const handleUserInput = async (inputMessage = userMessage) => {
     if (inputMessage.trim()) {
       addMessage(inputMessage, 'user');
-      const response = await getAuraResponse(inputMessage);
-      addMessage(response, 'bot');
+      try {
+        const response = await getAuraResponse(inputMessage);
+        addMessage(response, 'bot');
+      } catch (error) {
+        addMessage('There was an error processing your request. Please try again.', 'bot');
+      }
       setUserMessage('');
     }
   };
 
   const speak = (text) => {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = 'en-US';
-    window.speechSynthesis.speak(speech);
+    try {
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = 'en-US';
+      window.speechSynthesis.speak(speech);
+    } catch (error) {
+      console.error('Speech synthesis error:', error);
+    }
   };
 
   const startVoiceRecognition = () => {
@@ -66,7 +83,6 @@ function App() {
   
     recognition.start();
   };
-  
 
   return (
     <div className="container">
