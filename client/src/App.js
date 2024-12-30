@@ -40,7 +40,7 @@ function App() {
           const jsonResponse = JSON.parse(text);
           return jsonResponse.response;  // Assuming the JSON has a 'response' field
         } catch (error) {
-          console.error("Invalid JSON:", error);
+          console.error('Failed to parse JSON:', error.message || error);
           return 'Response is not in valid JSON format.';
         }
       } else {
