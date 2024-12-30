@@ -24,24 +24,32 @@ function App() {
         body: JSON.stringify({ command: message }),
       });
 
-      // Check if the response is OK
+      // Check if the server returns a 405 (Method Not Allowed)
+      if (response.status === 405) {
+        console.error("Method Not Allowed. Ensure your server is set to accept POST requests.");
+        return 'Method Not Allowed. Please check the server configuration.';
+      }
+
+      // Get the response as text first
+      const text = await response.text();
+      console.log("Raw response:", text);  // Log the raw response to see what's returned
+
+      // Check if the response is a valid JSON string
       if (response.ok) {
-        // Try parsing the response as JSON
         try {
-          const jsonResponse = await response.json();
-          return jsonResponse.response; // Assuming the response has a 'response' field
+          const jsonResponse = JSON.parse(text);
+          return jsonResponse.response;  // Assuming the JSON has a 'response' field
         } catch (error) {
-          console.error("Invalid JSON response:", error);
-          return 'Error: Invalid response format.';
+          console.error("Invalid JSON:", error);
+          return 'Response is not in valid JSON format.';
         }
       } else {
-        // Handle non-OK responses (e.g., 404, 500, etc.)
-        console.error('Server error:', response.status);
-        return 'Error: Unable to process request.';
+        console.error('Server error:', text);
+        return 'Something went wrong.';
       }
     } catch (error) {
       console.error("Error:", error);
-      return 'Something went wrong while communicating with the server.';
+      return 'Something went wrong.';
     }
   };
 
@@ -71,21 +79,21 @@ function App() {
   const startVoiceRecognition = () => {
     // Stop ongoing speech
     window.speechSynthesis.cancel();
-
+  
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.interimResults = false;
     recognition.lang = 'en-US';
-
+  
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
       handleUserInput(transcript);
     };
-
+  
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       addMessage('Could not understand the speech. Please try again.', 'bot');
     };
-
+  
     recognition.start();
   };
 
