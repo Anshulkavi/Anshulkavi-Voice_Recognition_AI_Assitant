@@ -25,10 +25,15 @@ function App() {
       });
 
       const text = await response.text(); // Get raw response
-      console.log('Response Text:', text); // Log it to check if it's valid
+      console.log('Response Text:', text); // Log it to check if it's valid JSON
 
-      // Assuming the response text is already in the format we need
-      return response.ok ? text : 'Something went wrong.';
+      try {
+        const data = JSON.parse(text); // Attempt to parse manually
+        return response.ok ? data.response : 'Something went wrong.';
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        return 'Something went wrong.';
+      }
     } catch (error) {
       console.error("Error:", error);
       return 'Something went wrong.';
