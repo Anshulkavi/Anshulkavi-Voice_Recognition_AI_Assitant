@@ -14,7 +14,7 @@ function App() {
     }
   };
 
- const getAuraResponse = async (message) => {
+const getAuraResponse = async (message) => {
   try {
     const response = await fetch('/command', {
       method: 'POST',
@@ -24,12 +24,21 @@ function App() {
       body: JSON.stringify({ command: message }),
     });
     
-    const text = await response.text();  // Read the response as plain text
-    console.log("Raw response:", text);   // Log the raw response
-
+    // Get the response as text first
+    const text = await response.text();
+    console.log("Raw response:", text);  // Log the raw response to see what's returned
+    
+    // Check if the response is a valid JSON string
     if (response.ok) {
-      return JSON.parse(text).response;  // Parse as JSON if valid
+      try {
+        const jsonResponse = JSON.parse(text);
+        return jsonResponse.response;  // Assuming the JSON has a 'response' field
+      } catch (error) {
+        console.error("Invalid JSON:", error);
+        return 'Invalid response format.';
+      }
     } else {
+      console.error('Server error:', text);
       return 'Something went wrong.';
     }
   } catch (error) {
@@ -37,6 +46,7 @@ function App() {
     return 'Something went wrong.';
   }
 };
+
 
 
   const handleUserInput = async (inputMessage = userMessage) => {
