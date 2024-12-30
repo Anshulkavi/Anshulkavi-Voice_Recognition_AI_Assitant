@@ -14,26 +14,34 @@ function App() {
     }
   };
 
-  const getAuraResponse = async (message) => {
-    try {
-      const response = await fetch('/command', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ command: message }),
-      });
+const getAuraResponse = async (message) => {
+  try {
+    const response = await fetch('/command', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ command: message }),
+    });
 
-      const text = await response.text(); // Get raw response
-      console.log('Response Text:', text); // Log it to check if it's valid
-
-      // Assuming the response text is already in the format we need
-      return response.ok ? text : 'Something went wrong.';
-    } catch (error) {
-      console.error("Error:", error);
-      return 'Something went wrong.';
+    // Check if the response is OK (status code 2xx)
+    if (!response.ok) {
+      throw new Error('Server responded with an error');
     }
-  };
+
+    // Get the text response from the server
+    const text = await response.text();
+    console.log('Response Text:', text);  // Log the raw text for debugging
+
+    // Return the raw text (you can further process it if needed)
+    return text;
+
+  } catch (error) {
+    console.error('Error:', error);
+    return 'Something went wrong. Please try again later.';  // Fallback message in case of error
+  }
+};
+
 
   const handleUserInput = async (inputMessage = userMessage) => {
     if (inputMessage.trim()) {
