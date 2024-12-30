@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -24,29 +24,11 @@ function App() {
         body: JSON.stringify({ command: message }),
       });
 
-      // Check if the server returns a 405 (Method Not Allowed)
-      if (response.status === 405) {
-        console.error("Method Not Allowed. Ensure your server is set to accept POST requests.");
-        return 'Method Not Allowed. Please check the server configuration.';
-      }
+      const text = await response.text(); // Get raw response
+      console.log('Response Text:', text); // Log it to check if it's valid
 
-      // Get the response as text first
-      const text = await response.text();
-      console.log("Raw response:", text);  // Log the raw response to see what's returned
-
-      // Check if the response is a valid JSON string
-      if (response.ok) {
-        try {
-          const jsonResponse = JSON.parse(text);
-          return jsonResponse.response;  // Assuming the JSON has a 'response' field
-        } catch (error) {
-          console.error('Failed to parse JSON:', error.message || error);
-          return 'Response is not in valid JSON format.';
-        }
-      } else {
-        console.error('Server error:', text);
-        return 'Something went wrong.';
-      }
+      // Assuming the response text is already in the format we need
+      return response.ok ? text : 'Something went wrong.';
     } catch (error) {
       console.error("Error:", error);
       return 'Something went wrong.';
